@@ -1,0 +1,18 @@
+# install modules
+node_modules
+
+# mac
+.DS_Store
+
+# ide
+.vs_code
+.idea
+
+# build
+dist
+
+*.swp
+*.swo
+
+# no need for tmpl
+package-lock.json

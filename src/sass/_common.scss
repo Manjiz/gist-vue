@@ -1,0 +1,98 @@
+$browser-default-font-size: 40px !default;
+
+// pt，设计稿是750的 - 2017-03-03
+@function pt($px, $is640:false) {
+  @if $px == 0 or $px == 0px {
+    @return 0;
+  }
+  @else {
+    @if $is640 {
+      @return $px / $browser-default-font-size * 1rem;
+    }
+    @else {
+      @return $px / $browser-default-font-size * 640 / 750 * 1rem;
+    }
+  }
+}
+//文字省略号
+@mixin textoverflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+// 多行文本
+@mixin textmultiline($line:2) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 160912 */
+// 吸顶元素
+// $dom: [内容器选择器]
+// $height: [外容器站位高度]
+// $top: [吸顶时距离顶部距离]
+// $zIndex: [z-index数值]
+// 使用：@include sticky('ul', 40px, 0, 10); 或 @include sticky('.wrap', 40px);
+@mixin sticky($dom, $height, $top:0, $zIndex:10) {
+  position: relative;
+  height: $height;
+  z-index: $zIndex;
+  &.fixed #{$dom} {
+    position: fixed;
+    top: $top;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    // max-width: 540px;
+    max-width: 640px;
+    z-index: $zIndex;
+  }
+  @supports (position: -webkit-sticky) {
+    & {
+      position: -webkit-sticky;
+      top: $top;
+      height: auto;
+      &.fixed #{$dom} {position: relative; top: 0;}
+    }
+  }
+}
+
+/* 2倍屏边 */
+@mixin retinaBorder($color, $direction:'bottom', $pseudo:'after') {
+  border-#{$direction}: 1px solid $color;
+  @media screen and (-webkit-min-device-pixel-ratio:2){
+    position: relative;
+    border-#{$direction}: 0;
+    &:#{$pseudo} {
+      content: '';
+      position: absolute;
+      background: $color;
+      @if $direction == 'top' or $direction == 'bottom' {
+        left: 0;
+        width: 100%; height :1px;
+        transform: scaleY(0.6);
+        @if $direction == 'top' {
+          top: 0;
+          transform-origin: center top;
+        } @else {
+          bottom: 0;
+          transform-origin: center bottom;
+        }
+      } @elseif $direction == 'right' or $direction == 'left' {
+        top: 0;
+        width: 1px; height: 100%;
+        transform: scaleX(0.6);
+        @if $direction == 'right' {
+          right: 0;
+          transform-origin: right center;
+        } @else {
+          left: 0;
+          transform-origin: left center;
+        }
+      }
+    }
+  }
+}
