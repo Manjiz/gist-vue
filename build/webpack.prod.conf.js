@@ -23,6 +23,7 @@ module.exports = merge(base, {
       chunkFilename: "[id].css"
     }),
     new UglifyJsPlugin({
+      sourceMap: true,
       uglifyOptions: {
         compress: {
           warnings: false
